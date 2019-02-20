@@ -11,7 +11,6 @@ class Collector(object):
     """
 
     sources = [
-        'https://somewhere.com/that/has/hosts/but/with/error'
         'https://www.malwaredomainlist.com/hostslist/hosts.txt',
         'https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.Dead/hosts',
         'https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.Spam/hosts',
