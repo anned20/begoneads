@@ -1,0 +1,2 @@
+class NotElevatedException(Exception):
+    pass
