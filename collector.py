@@ -47,7 +47,10 @@ class Collector(object):
         return sources
 
     def filter_hosts(self, hosts):
-        hosts = [line for line in hosts.split('\n')
+        hosts = hosts.split('\n')
+        hosts = list(set(hosts))
+
+        hosts = [line for line in hosts
                  if line.strip() != '' and not line.startswith('#')]
         hosts = '\n'.join(hosts)
 
