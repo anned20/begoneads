@@ -44,6 +44,7 @@ Commands:
   install    Install or update BeGoneAds
   uninstall  Uninstall BeGoneAds
 ```
+
 ## Sources of hosts data unified in this variant
 
 Updated `hosts` files from the following locations are always unified and
@@ -65,6 +66,14 @@ add.2o7Net | [link](https://github.com/FadeMind/hosts.extras) |
 KADhosts | [link](https://github.com/azet12/KADhosts) |
 AdAway | [link](https://adaway.org/) |
 add.Risk | [link](https://github.com/FadeMind/hosts.extras) |
+
+## TODO for 1.0.0
+
+- [ ] Windows support
+- [ ] Systemd integration
+- [ ] Custom selection of host files
+- [ ] Apply own hosts
+- [ ] Package it for Debian, Arch, CentOS, Fedora, etc.
 
 ## Testing
 
