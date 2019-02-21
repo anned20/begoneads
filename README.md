@@ -21,22 +21,22 @@ Clone this repository:
 git clone https://github.com/anned20/begoneads.git
 ```
 
-Install the dependencies:
+Install the program:
 
 ```shell
-pip install -r requirements.txt
+python setup.py install
 ```
 
 You are now ready to use BeGoneAds:
 
 ```shell
-python begoneads.py
+begoneads
 ```
 
 You should see something like:
 
 ```
-Usage: begoneads.py [OPTIONS] COMMAND [ARGS]...
+Usage: begoneads [OPTIONS] COMMAND [ARGS]...
 
   Install or uninstall BeGoneAds, the host blocker for the system hosts
   file
@@ -54,19 +54,19 @@ Commands:
 To install the hosts to your system hosts file: 
 
 ```shell
-python begoneads.py install
+begoneads install
 ```
 
 To install the hosts to your system hosts file with custom sources: 
 
 ```shell
-python begoneads.py install --sources https://www.custom.sources/hosts,http://www.and-another.one/hosts
+begoneads install --sources https://www.custom.sources/hosts,http://www.and-another.one/hosts
 ```
 
 To uninstall the hosts to your system hosts file: 
 
 ```shell
-python begoneads.py uninstall
+begoneads uninstall
 ```
 
 ## Sources of hosts data unified in this variant
@@ -95,10 +95,10 @@ add.Risk | [link](https://github.com/FadeMind/hosts.extras) |
 
 - [X] Windows support
 - [X] Custom selection of host files
+- [X] Setuptools
 - [ ] Systemd integration
 - [ ] Apply own hosts
 - [ ] Package it for Debian, Arch, CentOS, Fedora, etc.
-- [ ] Setuptools
 
 ## Testing
 

@@ -4,10 +4,10 @@ import os
 import sys
 import re
 import click
-from collector import Collector
-from hostsmanager import HostsManager
-from exceptions import *
-from helpers import is_admin
+from begoneads.collector import Collector
+from begoneads.hostsmanager import HostsManager
+from begoneads.exceptions import *
+from begoneads.helpers import is_admin
 
 # Default sources
 sources = [
