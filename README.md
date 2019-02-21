@@ -69,7 +69,7 @@ add.Risk | [link](https://github.com/FadeMind/hosts.extras) |
 
 ## TODO for 1.0.0
 
-- [ ] Windows support
+- [X] Windows support
 - [ ] Systemd integration
 - [ ] Custom selection of host files
 - [ ] Apply own hosts
