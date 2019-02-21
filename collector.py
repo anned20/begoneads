@@ -10,23 +10,12 @@ class Collector(object):
         sources: list
     """
 
-    sources = [
-        'https://www.malwaredomainlist.com/hostslist/hosts.txt',
-        'https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.Dead/hosts',
-        'https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.Spam/hosts',
-        'https://someonewhocares.org/hosts/zero/hosts',
-        'http://winhelp2002.mvps.org/hosts.txt',
-        'https://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&mimetype=plaintext&useip=0.0.0.0',
-        'https://raw.githubusercontent.com/mitchellkrogza/Badd-Boyz-Hosts/master/hosts',
-        'https://zerodot1.gitlab.io/CoinBlockerLists/hosts_browser',
-        'https://raw.githubusercontent.com/FadeMind/hosts.extras/master/UncheckyAds/hosts',
-        'https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.2o7Net/hosts',
-        'https://raw.githubusercontent.com/azet12/KADhosts/master/KADhosts.txt',
-        'https://raw.githubusercontent.com/AdAway/adaway.github.io/master/hosts.txt',
-        'https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.Risk/hosts',
-    ]
+    def __init__(self, sources):
+        self.sources = sources
 
     def try_get_sources(self, sources):
+        """Try and get each source, don't return them if the request was not succesful"""
+
         filtered = []
 
         for source in tqdm(sources):
@@ -40,6 +29,8 @@ class Collector(object):
         return filtered
 
     def fix_ips(self, sources):
+        """Replace all IP addresses with 0.0.0.0"""
+
         pattern = re.compile(r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}',
                              re.MULTILINE)
         sources = re.sub(pattern, '0.0.0.0', sources)
@@ -47,6 +38,8 @@ class Collector(object):
         return sources
 
     def filter_hosts(self, hosts):
+        """Only keep meaningful lines"""
+
         hosts = hosts.split('\n')
         hosts = list(set(hosts))
 
@@ -57,6 +50,8 @@ class Collector(object):
         return hosts
 
     def get_result(self):
+        """Get usable result"""
+
         sources = self.try_get_sources(self.sources)
         sources = '\n'.join(sources)
         hosts = self.fix_ips(sources)

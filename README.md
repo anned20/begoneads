@@ -9,6 +9,10 @@
 
 BeGoneAds is a script that puts some popular hosts file lists into the systems hosts file as a adblocker measure.
 
+## Requirements
+
+- Python 3.6 or higher
+
 ## Getting started
 
 Clone this repository:
@@ -45,6 +49,26 @@ Commands:
   uninstall  Uninstall BeGoneAds
 ```
 
+## Usage
+
+To install the hosts to your system hosts file: 
+
+```shell
+python begoneads.py install
+```
+
+To install the hosts to your system hosts file with custom sources: 
+
+```shell
+python begoneads.py install --sources https://www.custom.sources/hosts,http://www.and-another.one/hosts
+```
+
+To uninstall the hosts to your system hosts file: 
+
+```shell
+python begoneads.py uninstall
+```
+
 ## Sources of hosts data unified in this variant
 
 Updated `hosts` files from the following locations are always unified and
@@ -70,10 +94,11 @@ add.Risk | [link](https://github.com/FadeMind/hosts.extras) |
 ## TODO for 1.0.0
 
 - [X] Windows support
+- [X] Custom selection of host files
 - [ ] Systemd integration
-- [ ] Custom selection of host files
 - [ ] Apply own hosts
 - [ ] Package it for Debian, Arch, CentOS, Fedora, etc.
+- [ ] Setuptools
 
 ## Testing
 
