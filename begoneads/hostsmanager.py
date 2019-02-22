@@ -20,7 +20,7 @@ class HostsManager(object):
     def get_content(self):
         """Get current contents of file"""
 
-        file = open(self.path, 'r')
+        file = open(self.path, 'r', encoding='utf-8')
         self.content = file.read()
         file.close()
 
@@ -46,6 +46,6 @@ class HostsManager(object):
     def commit(self):
         """Save hosts file"""
 
-        file = open(self.path, 'w')
+        file = open(self.path, 'w', encoding='utf-8')
         file.write(self.content.replace('\r', ''))
         file.close()
