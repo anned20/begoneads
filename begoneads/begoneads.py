@@ -70,7 +70,6 @@ def install(sources):
     else:
         path = '/etc/hosts'
 
-    # Write to hosts file
     print('⋯ Parse current hosts file')
     hosts_manager = HostsManager(path)
 
@@ -90,9 +89,13 @@ def uninstall():
         raise NotElevatedException(
             'This program needs to be run as root to work properly')
 
-    # Write to hosts file
+    if sys.platform.startswith('win'):
+        path = r'c:\windows\system32\drivers\etc\hosts'
+    else:
+        path = '/etc/hosts'
+
     print('⋯ Parse current hosts file')
-    hosts_manager = HostsManager('/etc/hosts')
+    hosts_manager = HostsManager(path)
 
     print('⋯ Removing BeGoneAds')
     hosts_manager.remove_begoneads()
