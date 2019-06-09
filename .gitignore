@@ -114,3 +114,8 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Other stuff
+.pypirc
+deb_dist/
+begoneads-*.tar.gz
