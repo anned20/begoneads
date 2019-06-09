@@ -9,6 +9,10 @@
 
 BeGoneAds is a script that puts some popular hosts file lists into the systems hosts file as a adblocker measure.
 
+See it working on asciinema:
+
+[![asciicast](https://asciinema.org/a/weDJ7SZw49HBdTl7iB0nWIYgI.svg)](https://asciinema.org/a/weDJ7SZw49HBdTl7iB0nWIYgI)
+
 ## Requirements
 
 - Python 3.6 or higher
