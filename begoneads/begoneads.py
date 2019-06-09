@@ -4,7 +4,8 @@ import os
 import sys
 import re
 import click
-from begoneads.collector import Collector
+from begoneads.collectors.remote_collector import RemoteCollector
+from begoneads.collectors.local_collector import LocalCollector
 from begoneads.hostsmanager import HostsManager
 from begoneads.exceptions import *
 from begoneads.helpers import is_admin
@@ -35,13 +36,16 @@ def cli():
 @cli.command('install', short_help='Install or update BeGoneAds')
 @click.option('--sources', is_flag=False, default=','.join(sources),
               type=click.STRING, help='Sets sources to fetch from, seperated by ,')
-def install(sources):
+@click.option('--local-sources', is_flag=False, default='',
+              type=click.STRING, help='Pass local hosts files to include')
+def install(sources, local_sources):
     # Check if we have sufficient permissions
     if not is_admin(sys.platform.startswith('win')):
         raise NotElevatedException(
             'This program needs to be run as root to work properly')
 
     sources = [i.strip() for i in sources.split(',')]
+    local_sources = [i.strip() for i in local_sources.split(',')]
 
     url_pattern = re.compile(
         r'^(?:http|ftp)s?://'  # http:// or https://
@@ -57,13 +61,30 @@ def install(sources):
         if not re.match(url_pattern, source):
             raise InvalidSourceException(source)
 
+    for source in local_sources:
+        if not os.path.isfile(source):
+            raise InvalidSourceException(source)
+
     # Collect hosts for hosts file
-    collector = Collector(sources)
+    remote_collector = RemoteCollector(sources)
 
-    print('⋯ Collecting and parsing hosts')
-    hosts = collector.get_result()
+    print('⋯ Collecting and parsing remote hosts')
+    remote_hosts = remote_collector.get_result()
 
-    print('✓ Hosts collected')
+    print('✓ Remote hosts collected')
+
+    # Collect local host files
+    local_collector = LocalCollector(local_sources)
+
+    print('⋯ Collecting and parsing local hosts')
+    local_hosts = local_collector.get_result()
+
+    hosts = "\n".join([
+        remote_hosts,
+        local_hosts
+    ])
+
+    print('✓ Local hosts collected')
 
     if sys.platform.startswith('win'):
         path = r'c:\windows\system32\drivers\etc\hosts'

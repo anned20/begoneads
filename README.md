@@ -67,6 +67,14 @@ To install the hosts to your system hosts file with custom sources:
 begoneads install --sources https://www.custom.sources/hosts,http://www.and-another.one/hosts
 ```
 
+To install the hosts to your system hosts file with local sources: 
+
+```shell
+begoneads install --local-sources path/to/hosts/file,other/path
+```
+
+The options `sources` and `local-sources` can be used together
+
 To uninstall the hosts to your system hosts file: 
 
 ```shell
@@ -100,8 +108,8 @@ add.Risk | [link](https://github.com/FadeMind/hosts.extras) |
 - [X] Windows support
 - [X] Custom selection of host files
 - [X] Setuptools
+- [X] Apply own hosts
 - [ ] Systemd integration
-- [ ] Apply own hosts
 - [ ] Package it for Debian, Arch, CentOS, Fedora, etc.
 
 ## Testing

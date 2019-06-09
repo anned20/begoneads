@@ -1,7 +1,7 @@
-from collector import Collector
+from begoneads.collectors.remote_collector import RemoteCollector
 from unittest.mock import patch
 
-collector = Collector()
+collector = RemoteCollector([])
 
 
 def test_try_get_sources():

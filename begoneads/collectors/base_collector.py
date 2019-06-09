@@ -3,8 +3,8 @@ import re
 from tqdm import tqdm
 
 
-class Collector(object):
-    """A class that collects the remote hosts files
+class BaseCollector(object):
+    """A base class for all collectors
 
     Attributes:
         sources: list
@@ -14,28 +14,22 @@ class Collector(object):
         self.sources = sources
 
     def try_get_sources(self, sources):
-        """Try and get each source, don't return them if the request was not succesful"""
+        """Try and get each file"""
 
         filtered = []
 
         for source in tqdm(sources):
-            response = requests.get(source)
-
-            if response.status_code >= 200 and response.status_code < 300:
-                content = str(response.text)
-
-                filtered.append(content)
+            with open(source) as _file:
+                filtered.append(_file.read())
 
         return filtered
 
-    def fix_ips(self, sources):
+    def fix_ips(self, hosts):
         """Replace all IP addresses with 0.0.0.0"""
 
-        pattern = re.compile(r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}',
-                             re.MULTILINE)
-        sources = re.sub(pattern, '0.0.0.0', sources)
+        hosts = re.sub(r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', '0.0.0.0', hosts, 0, re.MULTILINE)
 
-        return sources
+        return hosts
 
     def filter_hosts(self, hosts):
         """Only keep meaningful lines"""

@@ -1,4 +1,4 @@
-from hostsmanager import HostsManager, start_marker, end_marker
+from begoneads.hostsmanager import HostsManager, start_marker, end_marker
 from unittest.mock import patch, mock_open
 
 without_begoneads = '''
