@@ -45,7 +45,9 @@ def install(sources, local_sources):
             'This program needs to be run as root to work properly')
 
     sources = [i.strip() for i in sources.split(',')]
-    local_sources = [i.strip() for i in local_sources.split(',')]
+
+    if local_sources:
+        local_sources = [i.strip() for i in local_sources.split(',')]
 
     url_pattern = re.compile(
         r'^(?:http|ftp)s?://'  # http:// or https://
@@ -73,18 +75,21 @@ def install(sources, local_sources):
 
     print('✓ Remote hosts collected')
 
-    # Collect local host files
-    local_collector = LocalCollector(local_sources)
+    local_hosts = ""
 
-    print('⋯ Collecting and parsing local hosts')
-    local_hosts = local_collector.get_result()
+    if local_sources:
+        # Collect local host files
+        local_collector = LocalCollector(local_sources)
+
+        print('⋯ Collecting and parsing local hosts')
+        local_hosts = local_collector.get_result()
+
+        print('✓ Local hosts collected')
 
     hosts = "\n".join([
         remote_hosts,
         local_hosts
     ])
-
-    print('✓ Local hosts collected')
 
     if sys.platform.startswith('win'):
         path = r'c:\windows\system32\drivers\etc\hosts'
