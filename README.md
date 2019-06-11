@@ -102,6 +102,12 @@ add.2o7Net | [link](https://github.com/FadeMind/hosts.extras) |
 KADhosts | [link](https://github.com/azet12/KADhosts) |
 AdAway | [link](https://adaway.org/) |
 add.Risk | [link](https://github.com/FadeMind/hosts.extras) |
+HpHosts | [link](https://hosts-file.net) |
+The Hosts File Project | [link](https://hosts-file.net) |
+joeylane hosts file | [link](https://raw.githubusercontent.com/joeylane/hosts/master/hosts) |
+yhosts | [link](https://raw.githubusercontent.com/vokins/yhosts/master/hosts) |
+HostsFile.org | [link](https://www.hostsfile.org/Downloads/hosts.txt) |
+	
 
 ## TODO for 1.0.0
 
