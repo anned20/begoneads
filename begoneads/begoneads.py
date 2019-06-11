@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 
 import os
 import sys
@@ -25,6 +25,13 @@ sources = [
     'https://raw.githubusercontent.com/azet12/KADhosts/master/KADhosts.txt',
     'https://raw.githubusercontent.com/AdAway/adaway.github.io/master/hosts.txt',
     'https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.Risk/hosts',
+    'https://hosts-file.net/exp.txt',
+    'https://hosts-file.net/grm.txt',
+    'https://hosts-file.net/emd.txt',
+    'https://hostsfile.mine.nu/hosts0.txt',
+    'https://raw.githubusercontent.com/joeylane/hosts/master/hosts',
+    'https://raw.githubusercontent.com/vokins/yhosts/master/hosts',
+    'https://www.hostsfile.org/Downloads/hosts.txt',
 ]
 
 
