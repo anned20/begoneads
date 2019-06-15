@@ -27,7 +27,8 @@ class BaseCollector(object):
     def fix_ips(self, hosts):
         """Replace all IP addresses with 0.0.0.0"""
 
-        hosts = re.sub(r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', '0.0.0.0', hosts, 0, re.MULTILINE)
+        hosts = re.sub(r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}',
+                       '0.0.0.0', hosts, 0, re.MULTILINE)
 
         return hosts
 
@@ -35,8 +36,6 @@ class BaseCollector(object):
         """Only keep meaningful lines"""
 
         hosts = hosts.split('\n')
-        hosts = list(set(hosts))
-
         hosts = [line for line in hosts
                  if line.strip() != '' and not line.startswith('#')]
         hosts = '\n'.join(hosts)

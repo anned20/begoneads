@@ -75,7 +75,7 @@ def install(sources, local_sources):
 
     print('✓ Remote hosts collected')
 
-    local_hosts = ""
+    local_hosts = ''
 
     if local_sources:
         # Collect local host files
@@ -86,10 +86,14 @@ def install(sources, local_sources):
 
         print('✓ Local hosts collected')
 
-    hosts = "\n".join([
+    hosts = '\n'.join([
         remote_hosts,
         local_hosts
     ])
+
+    hosts = hosts.split('\n')
+    hosts = list(set(hosts))
+    hosts = '\n'.join(hosts)
 
     if sys.platform.startswith('win'):
         path = r'c:\windows\system32\drivers\etc\hosts'
