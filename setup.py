@@ -8,7 +8,7 @@ def readme():
 
 setup(
     name='begoneads',
-    version='0.0.7',
+    version='0.0.8',
     description='BeGoneAds puts some popular hosts file lists into the hosts file as a adblocker measure.',
     python_requires='>=3.6',
     long_description=readme(),

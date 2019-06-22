@@ -70,10 +70,10 @@ def install(sources, local_sources):
     # Collect hosts for hosts file
     remote_collector = RemoteCollector(sources)
 
-    print('⋯ Collecting and parsing remote hosts')
+    print('Collecting and parsing remote hosts')
     remote_hosts = remote_collector.get_result()
 
-    print('✓ Remote hosts collected')
+    print('Remote hosts collected')
 
     local_hosts = ''
 
@@ -81,10 +81,10 @@ def install(sources, local_sources):
         # Collect local host files
         local_collector = LocalCollector(local_sources)
 
-        print('⋯ Collecting and parsing local hosts')
+        print('Collecting and parsing local hosts')
         local_hosts = local_collector.get_result()
 
-        print('✓ Local hosts collected')
+        print('Local hosts collected')
 
     hosts = '\n'.join([
         remote_hosts,
@@ -100,16 +100,16 @@ def install(sources, local_sources):
     else:
         path = '/etc/hosts'
 
-    print('⋯ Parse current hosts file')
+    print('Parse current hosts file')
     hosts_manager = HostsManager(path)
 
-    print('⋯ Applying new hosts')
+    print('Applying new hosts')
     hosts_manager.apply_hosts(hosts)
 
-    print('⋯ Saving')
+    print('Saving')
     hosts_manager.commit()
 
-    print('✓ Hosts applied')
+    print('Hosts applied')
 
 
 @cli.command('uninstall', short_help='Uninstall BeGoneAds')
@@ -124,16 +124,16 @@ def uninstall():
     else:
         path = '/etc/hosts'
 
-    print('⋯ Parse current hosts file')
+    print('Parse current hosts file')
     hosts_manager = HostsManager(path)
 
-    print('⋯ Removing BeGoneAds')
+    print('Removing BeGoneAds')
     hosts_manager.remove_begoneads()
 
-    print('⋯ Saving')
+    print('Saving')
     hosts_manager.commit()
 
-    print('✓ BeGoneAds uninstalled')
+    print('BeGoneAds uninstalled')
 
 
 if __name__ == '__main__':
