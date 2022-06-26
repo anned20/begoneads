@@ -1,5 +1,4 @@
 import requests
-import re
 from tqdm import tqdm
 from begoneads.collectors.base_collector import BaseCollector
 

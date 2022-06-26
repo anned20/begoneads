@@ -7,7 +7,7 @@ import click
 from begoneads.collectors.remote_collector import RemoteCollector
 from begoneads.collectors.local_collector import LocalCollector
 from begoneads.hostsmanager import HostsManager
-from begoneads.exceptions import *
+from begoneads.exceptions import NotElevatedException, InvalidSourceException
 from begoneads.helpers import is_admin
 
 # Default sources
