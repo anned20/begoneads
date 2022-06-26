@@ -17,7 +17,17 @@ See it working on asciinema:
 
 - Python 3.6 or higher
 
-## Getting started
+## Installation instructions
+
+### From PyPI
+
+To install BeGoneAds from PyPI use the following command:
+
+```shell
+pip install begoneads
+```
+
+### From source
 
 Clone this repository:
 
@@ -30,6 +40,8 @@ Install the program:
 ```shell
 python setup.py install
 ```
+
+## Getting started
 
 You are now ready to use BeGoneAds:
 
@@ -86,22 +98,22 @@ begoneads uninstall
 Updated `hosts` files from the following locations are always unified and
 included:
 
-Host file source | Home page |
------------------|:---------:|
-Steven Black's ad-hoc list | [link](https://github.com/StevenBlack/hosts/blob/master/data/StevenBlack/hosts) |
-Malware Domain List | [link](https://www.malwaredomainlist.com/) |
-add.Dead | [link](https://github.com/FadeMind/hosts.extras) |
-add.Spam | [link](https://github.com/FadeMind/hosts.extras) |
-Dan Pollock | [link](https://someonewhocares.org/hosts/) |
-MVPS hosts file | [link](http://winhelp2002.mvps.org/) |
-yoyo.org | [link](https://pgl.yoyo.org/adservers/) |
+Host file source                  | Home page   |
+-----------------                 | :---------: |
+Steven Black's ad-hoc list        | [link](https://github.com/StevenBlack/hosts/blob/master/data/StevenBlack/hosts) |
+Malware Domain List               | [link](https://www.malwaredomainlist.com/) |
+add.Dead                          | [link](https://github.com/FadeMind/hosts.extras) |
+add.Spam                          | [link](https://github.com/FadeMind/hosts.extras) |
+Dan Pollock                       | [link](https://someonewhocares.org/hosts/) |
+MVPS hosts file                   | [link](http://winhelp2002.mvps.org/) |
+yoyo.org                          | [link](https://pgl.yoyo.org/adservers/) |
 Mitchell Krog's - Badd Boyz Hosts | [link](https://github.com/mitchellkrogza/Badd-Boyz-Hosts) |
-CoinBlocker | [link](https://gitlab.com/ZeroDot1/CoinBlockerLists) |
-UncheckyAds | [link](https://github.com/FadeMind/hosts.extras) |
-add.2o7Net | [link](https://github.com/FadeMind/hosts.extras) |
-KADhosts | [link](https://github.com/azet12/KADhosts) |
-AdAway | [link](https://adaway.org/) |
-add.Risk | [link](https://github.com/FadeMind/hosts.extras) |
+CoinBlocker                       | [link](https://gitlab.com/ZeroDot1/CoinBlockerLists) |
+UncheckyAds                       | [link](https://github.com/FadeMind/hosts.extras) |
+add.2o7Net                        | [link](https://github.com/FadeMind/hosts.extras) |
+KADhosts                          | [link](https://github.com/azet12/KADhosts) |
+AdAway                            | [link](https://adaway.org/) |
+add.Risk                          | [link](https://github.com/FadeMind/hosts.extras) |
 
 ## TODO for 1.0.0
 
