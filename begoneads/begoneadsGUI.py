@@ -11,7 +11,7 @@ class App (tk.Tk):
         self.geometry("600x400")
 
         self.host_section = ttk.LabelFrame(self, text='Hosts', borderwidth=4, width=300, height=200)
-        self.host_section.pack(padx=10, pady=20)
+        self.host_section.pack(padx=10, pady=20, side='top', anchor='nw')
         self.tw_scroll=tk.Scrollbar(self.host_section)
         self.tw_scroll.pack(side='right', fill='y')
         self.sources = list(enumerate(begoneads.sources))
@@ -26,6 +26,12 @@ class App (tk.Tk):
             self.host_tw.insert(parent='', index=source[0], iid=str(source[0]), values=source )
         self.host_tw.selection_add([str(i) for i in range(len(self.sources))])
         self.tw_scroll.config(command=self.host_tw.yview)
+        self.host_tw.bind('<1>', self.on_click)
+
+    def on_click(self, event):
+        item = self.host_tw.identify('item', event.x, event.y)
+        self.host_tw.selection_toggle(item)
+        
 
         
 app = App()
