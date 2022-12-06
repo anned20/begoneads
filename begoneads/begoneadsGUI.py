@@ -10,7 +10,8 @@ class App (tk.Tk):
         super().__init__()
         self.title("Begoneads")
         self.geometry("600x400")
-
+        self.style=ttk.Style()
+        self.style.map('Treeview', background=[('selected', 'green')])
         self.host_section = ttk.LabelFrame(self, text='Sources', borderwidth=4, width=300, height=200)
         self.host_section.pack(padx=10, pady=20, side='top', anchor='nw')
         self.tw_scroll=tk.Scrollbar(self.host_section)
@@ -25,11 +26,13 @@ class App (tk.Tk):
         self.host_tw.column("Address", width=300, anchor="w")
         self.host_tw.heading("ID", text="ID")
         self.host_tw.heading("Address", text="Address")
+        self.host_tw.tag_configure('todelete', background='red')
         for source in self.sources:
             self.host_tw.insert(parent='', index=source[0], iid=str(source[0]), values=source )
         self.host_tw.selection_add([str(i) for i in range(len(self.sources))])
         self.tw_scroll.config(command=self.host_tw.yview)
         self.host_tw.bind('<1>', self.on_click)
+        self.host_tw.bind('<3>', self.on_right_click)
         self.add_host_entry=tk.Entry(self, width=45)
         self.add_host_entry.pack(side='left', anchor='nw', padx=(10,0))
         #make a validation of the host inserted
@@ -38,9 +41,17 @@ class App (tk.Tk):
         
     def on_click(self, event):
         item = self.host_tw.identify('item', event.x, event.y)
-        self.host_tw.selection_toggle(item)
+        if not self.host_tw.tag_has('todelete', item):
+            self.host_tw.selection_toggle(item)
     def on_right_click(self, event):
         item = self.host_tw.identify('item', event.x, event.y)
+        print(item)
+        self.host_tw.selection_remove(item)
+        if self.host_tw.tag_has('todelete', item):
+            self.host_tw.item(str(item), tags=())
+        else:
+            self.host_tw.item(str(item), tags='todelete')
+        print("tag has: ", self.host_tw.tag_has('todelete'))
         
         
     def add_domain(self):
