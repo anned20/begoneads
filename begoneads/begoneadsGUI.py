@@ -33,7 +33,7 @@ class App (tk.Tk):
         self.add_host_entry=tk.Entry(self, width=45)
         self.add_host_entry.pack(side='left', anchor='nw', padx=(10,0))
         #make a validation of the host inserted
-        self.add_host_btn = tk.Button(self, text="add source")
+        self.add_host_btn = tk.Button(self, text="add source", command=self.add_domain)
         self.add_host_btn.pack(side='left', anchor='nw', padx=5)
         
     def on_click(self, event):
@@ -45,7 +45,7 @@ class App (tk.Tk):
         
     def add_domain(self):
         domain = self.add_host_entry.get()
-        self.sources += [(len(self.sources + 1), domain )]
+        self.sources += [(len(self.sources), domain )]
         source = self.sources[-1]
         self.host_tw.insert(parent='', index=source[0], iid=str(source[0]), values=source )
         self.host_tw.selection_toggle(str(source[0]))
