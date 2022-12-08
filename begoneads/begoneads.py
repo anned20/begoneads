@@ -135,6 +135,9 @@ def uninstall():
 
     print('BeGoneAds uninstalled')
 
+@cli.command('pause', short_help='Pause BeGoneAds')
+def gui():
+    print("Begoneads paused")
 
 if __name__ == '__main__':
     cli()
