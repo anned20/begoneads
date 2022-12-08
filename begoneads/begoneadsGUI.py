@@ -9,16 +9,19 @@ class App (tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("Begoneads")
-        self.geometry("600x400")
+        self.geometry("600x600")
+        self.resizable(False, False)
         self.style=ttk.Style()
         self.style.map('Treeview', background=[('selected', 'green')])
-        self.host_section = ttk.LabelFrame(self, text='Sources', borderwidth=4, width=300, height=200)
-        self.host_section.pack(padx=10, pady=20, side='top', anchor='nw')
+        self.host_section = ttk.LabelFrame(self, text='Remote Sources', borderwidth=4, width=300, height=200)
+        self.host_section.grid(padx=10, pady=20, row=0, column=0)
+        self.actions_section = ttk.Labelframe(self, text='Actions', borderwidth=4, width=200, height=200)
+        self.actions_section.grid(row=0, column=1)
         self.tw_scroll=tk.Scrollbar(self.host_section)
         self.tw_scroll.pack(side='right', fill='y')
         self.sources = list(enumerate(begoneads.sources))
-        for i in self.sources:
-            print(i)
+        #for i in self.sources:
+            #print(i)
         self.host_tw = ttk.Treeview(self.host_section, columns=["ID", "Address"], yscrollcommand=self.tw_scroll.set, selectmode="none", displaycolumns=["ID", "Address"])
         self.host_tw.pack()
         self.host_tw.column("#0", width=0, stretch="no")
@@ -60,6 +63,11 @@ class App (tk.Tk):
         source = self.sources[-1]
         self.host_tw.insert(parent='', index=source[0], iid=str(source[0]), values=source )
         self.host_tw.selection_toggle(str(source[0]))
+
+    def get_selection(self):
+        sel=self.host_tw.selection_get()
+        print(sel)
+    
         
 
         
