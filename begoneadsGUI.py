@@ -37,6 +37,9 @@ class Labelscrolledtw(ttk.LabelFrame):
         else:
             self.tw.item(str(item), tags='todelete')
         #print("tag has: ", self.tw.tag_has('todelete'))
+
+    def delete_marked(self):
+        print('deleting...')
         
 
 class App (tk.Tk):
@@ -45,7 +48,7 @@ class App (tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("Begoneads")
-        self.geometry("600x650")
+        self.geometry("650x650")
         self.resizable(False, False)
         self.style=ttk.Style()
         self.style.map('Treeview', background=[('selected', 'green')])
@@ -67,8 +70,12 @@ class App (tk.Tk):
         self.add_remote_entry=tk.Entry(self, width=45)
         self.add_remote_entry.grid(row=1, column=0, sticky='ne', padx=(0,10))
         #make a validation of the remote inserted
-        self.add_remote_btn = tk.Button(self, text="add remote", command=self.add_domain)
-        self.add_remote_btn.grid(row=1, column=1, sticky='nw')
+        self.remote_btns = tk.Frame(self)
+        self.remote_btns.grid(row=1, column=1)
+        self.add_remote_btn = tk.Button(self.remote_btns, text="Add remote", command=self.add_domain)
+        self.add_remote_btn.grid(row=0, column=0, sticky='nw')
+        self.remove_remotes_btn = tk.Button(self.remote_btns, text="Remove marked remotes\n(in red) ", command=self.remote_section.delete_marked)
+        self.remove_remotes_btn.grid(row=0, column=1, sticky='nw')
 
 
         ################################################
@@ -88,9 +95,14 @@ class App (tk.Tk):
         #ACTIONS SECTION
         ##############################################
         self.actions_section = ttk.Labelframe(self, text='Actions', borderwidth=4, width=200, height=200)
+        self.actions_section.pack_propagate(False)
         self.actions_section.grid(row=0, column=1)
-        self.play_bttn = tk.Button(self.actions_section, text='play', command=self.install)
-        self.play_bttn.pack()
+        self.play_bttn = tk.Button(self.actions_section, text='play', command=self.install, width=8)
+        self.play_bttn.pack(anchor='w', padx=5, pady=2)
+        self.pause_bttn = tk.Button(self.actions_section, text='pause', command=self.pause, width=8)
+        self.pause_bttn.pack(anchor='w', padx=5, pady=2)
+        self.stop_bttn = tk.Button(self.actions_section, text='stop', command=self.stop, width=8)
+        self.stop_bttn.pack(anchor='w', padx=5, pady=2)
        
     def add_domain(self):
         domain = self.add_remote_entry.get()
@@ -119,6 +131,12 @@ class App (tk.Tk):
         print(paths)
         print([i.strip() for i in remotes.split(',')])
         bg.install.callback(remotes, paths)
+    def pause(self):
+        pass
+    def stop(self):
+        bg.uninstall.callback()
+
+
         
 app = App()
 app.mainloop()
