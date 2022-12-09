@@ -50,8 +50,8 @@ class App (tk.Tk):
     
     def __init__(self):
         super().__init__()
-        self.title("Begoneads")
-        self.geometry("650x700")
+        self.title("Begoneads GUI")
+        self.geometry("650x750")
         self.resizable(False, False)
         self.style=ttk.Style()
         self.style.map('Treeview', background=[('selected', 'green')])
@@ -74,11 +74,11 @@ class App (tk.Tk):
         self.add_remote_entry.grid(row=1, column=0, sticky='ne', padx=(0,10))
         #make a validation of the remote inserted
         self.remote_btns = tk.Frame(self)
-        self.remote_btns.grid(row=1, column=1)
-        self.add_remote_btn = tk.Button(self.remote_btns, text="Add remote", command=self.add_domain)
-        self.add_remote_btn.grid(row=0, column=0, sticky='nw')
+        self.remote_btns.grid(row=2, column=0)
+        self.add_remote_btn = tk.Button(self.remote_btns, text="Add remote", command=self.add_domain, width=10, height=2)
+        self.add_remote_btn.grid(row=0, column=0, sticky='w', pady=10)
         self.remove_remotes_btn = tk.Button(self.remote_btns, text="Remove marked remotes\n(in red) ", command=self.remote_section.delete_marked)
-        self.remove_remotes_btn.grid(row=0, column=1, sticky='nw')
+        self.remove_remotes_btn.grid(row=0, column=1, sticky='w', pady=10)
 
 
         ################################################
@@ -86,16 +86,16 @@ class App (tk.Tk):
         ##############################################
         
         self.local_section = Labelscrolledtw(self, text='Local Sources', borderwidth=4, width=300, height=200, columns=[("ID", 20, 'center'), ("Path", 300, 'w')])
-        self.local_section.grid(padx=10, pady=20, row=2, column=0)
+        self.local_section.grid(padx=10, pady=20, row=3, column=0)
         self.add_local_entry=tk.Entry(self, width=45)
-        self.add_local_entry.grid(row=3, column=0, sticky='ne', padx=(0,10))
+        self.add_local_entry.grid(row=4, column=0, sticky='ne', padx=10)
         #make a validation of the local inserted
         self.local_btns = tk.Frame(self)
-        self.local_btns.grid(row=3, column=1)
-        self.add_local_btn = tk.Button(self.local_btns, text="add local", command=self.add_path)
-        self.add_local_btn.grid(row=0, column=0, sticky='nw')
+        self.local_btns.grid(row=5, column=0)
+        self.add_local_btn = tk.Button(self.local_btns, text="Add local", command=self.add_path, width=10, height=2 )
+        self.add_local_btn.grid(row=0, column=0, sticky='w', pady=10)
         self.remove_local_btn = tk.Button(self.local_btns, text="Remove marked paths\n(in red) ", command=self.local_section.delete_marked)
-        self.remove_local_btn.grid(row=0, column=1, sticky='nw')
+        self.remove_local_btn.grid(row=0, column=1, sticky='w', pady=10)
 
         ################################################
         #ACTIONS SECTION
@@ -103,19 +103,31 @@ class App (tk.Tk):
         self.actions_section = ttk.Labelframe(self, text='Actions', borderwidth=4, width=200, height=200)
         self.actions_section.pack_propagate(False)
         self.actions_section.grid(row=0, column=1)
-        self.play_bttn = tk.Button(self.actions_section, text='play', command=self.install, width=8)
+        self.play_bttn = tk.Button(self.actions_section, text='Play', command=self.install, width=8)
         self.play_bttn.pack(anchor='w', padx=5, pady=2)
-        self.pause_bttn = tk.Button(self.actions_section, text='pause', command=self.pause, width=8)
+        self.pause_bttn = tk.Button(self.actions_section, text='Pause', command=self.pause, width=8)
         self.pause_bttn.pack(anchor='w', padx=5, pady=2)
-        self.stop_bttn = tk.Button(self.actions_section, text='stop', command=self.stop, width=8)
+        self.stop_bttn = tk.Button(self.actions_section, text='Stop', command=self.stop, width=8)
         self.stop_bttn.pack(anchor='w', padx=5, pady=2)
 
+        self.default_remotes_btn = tk.Button(self.actions_section, text="Default remotes", width=12, command=self.default_remotes)
+        self.default_remotes_btn.pack(anchor='e')
+        self.clear_local_btn = tk.Button(self.actions_section, text="Clear paths", command=self.clear_paths, width=12)
+        self.clear_local_btn.pack(anchor='e')
+        
 
     def default_remotes(self):
-        
+        for element in self.remote_section.tw.get_children():
+            self.remote_section.tw.delete(element)
         self.sources = list(enumerate(bg.sources))
         for source in self.sources:
             self.remote_section.tw.insert(parent='', index=source[0], iid=str(source[0]), values=source )
+        self.remote_section.tw.selection_add([str(i) for i in range(len(self.sources))])
+            
+    def clear_paths(self):
+        for element in self.local_section.tw.get_children():
+            self.local_section.tw.delete(element)
+
     def add_domain(self):
         domain = self.add_remote_entry.get()
         if domain == '':
