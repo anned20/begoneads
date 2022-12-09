@@ -39,7 +39,10 @@ class Labelscrolledtw(ttk.LabelFrame):
         #print("tag has: ", self.tw.tag_has('todelete'))
 
     def delete_marked(self):
-        print('deleting...')
+        marked = self.tw.tag_has('todelete')
+        print('deleting...', marked)
+        for item in marked:
+            self.tw.delete(item)
         
 
 class App (tk.Tk):
@@ -48,7 +51,7 @@ class App (tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("Begoneads")
-        self.geometry("650x650")
+        self.geometry("650x700")
         self.resizable(False, False)
         self.style=ttk.Style()
         self.style.map('Treeview', background=[('selected', 'green')])
@@ -87,9 +90,12 @@ class App (tk.Tk):
         self.add_local_entry=tk.Entry(self, width=45)
         self.add_local_entry.grid(row=3, column=0, sticky='ne', padx=(0,10))
         #make a validation of the local inserted
-        self.add_local_btn = tk.Button(self, text="add local", command=self.add_path)
-        self.add_local_btn.grid(row=3, column=1, sticky='nw')
-
+        self.local_btns = tk.Frame(self)
+        self.local_btns.grid(row=3, column=1)
+        self.add_local_btn = tk.Button(self.local_btns, text="add local", command=self.add_path)
+        self.add_local_btn.grid(row=0, column=0, sticky='nw')
+        self.remove_local_btn = tk.Button(self.local_btns, text="Remove marked paths\n(in red) ", command=self.local_section.delete_marked)
+        self.remove_local_btn.grid(row=0, column=1, sticky='nw')
 
         ################################################
         #ACTIONS SECTION
@@ -103,7 +109,13 @@ class App (tk.Tk):
         self.pause_bttn.pack(anchor='w', padx=5, pady=2)
         self.stop_bttn = tk.Button(self.actions_section, text='stop', command=self.stop, width=8)
         self.stop_bttn.pack(anchor='w', padx=5, pady=2)
-       
+
+
+    def default_remotes(self):
+        
+        self.sources = list(enumerate(bg.sources))
+        for source in self.sources:
+            self.remote_section.tw.insert(parent='', index=source[0], iid=str(source[0]), values=source )
     def add_domain(self):
         domain = self.add_remote_entry.get()
         if domain == '':
