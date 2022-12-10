@@ -133,6 +133,12 @@ class App (tk.Tk):
         self.backups_section = BCLabelscrolledtw(self, text='Backups', columns=[("ID", 20, "center"), ("Timestamp", 120, "center")])
         self.backups_section.grid(row=1, column=1, rowspan=4, sticky='e')
 
+        self.make_backup_btn = tk.Button(self.backups_section, text="make backup", width=12)
+        self.make_backup_btn.pack()
+        self.restore_backup_btn = tk.Button(self.backups_section, text="restore selected", width=12)
+        self.restore_backup_btn.pack()
+        self.delete_backups_btn = tk.Button(self.backups_section, text="delete marked", width=12)
+        self.delete_backups_btn.pack()
             
         
     def default_remotes(self):
@@ -178,6 +184,9 @@ class App (tk.Tk):
         pass
     def stop(self):
         bg.uninstall.callback()
+
+    def make_backup(self):
+        
 
 
 #if __name__ == __main__:        
