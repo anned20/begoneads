@@ -1,4 +1,6 @@
 
+#(c) 2022 Cid0rz (cid.kampeador@gmail.com)
+
 import tkinter as tk
 from tkinter import ttk
 import begoneads.begoneads as bg
