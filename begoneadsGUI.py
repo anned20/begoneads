@@ -45,7 +45,16 @@ class Labelscrolledtw(ttk.LabelFrame):
         print('deleting...', marked)
         for item in marked:
             self.tw.delete(item)
-        
+
+class BCLabelscrolledtw(Labelscrolledtw):
+    def __init__(self, parent, text='BCLabelscrolledtw', borderwidth=4, width=300, height=200, columns = [("ID", 20, 'center')], selectmode='none'):
+        super().__init__(parent , text=text, borderwidth=borderwidth, width=width, height=height, columns = columns, selectmode=selectmode)
+
+    def on_click(self, event):
+        item = self.tw.identify('item', event.x, event.y)
+        if not self.tw.tag_has('todelete', item):
+            self.tw.selection_remove(self.tw.selection_get())
+            self.tw.selection_toggle(item)
 
 class App (tk.Tk):
     """Begoneads GUI in tkinter, some widgets tied together that invoke the begoneads functions. and extend its functionality"""
@@ -116,8 +125,16 @@ class App (tk.Tk):
         self.default_remotes_btn.pack(anchor='e')
         self.clear_local_btn = tk.Button(self.actions_section, text="Clear paths", command=self.clear_paths, width=12)
         self.clear_local_btn.pack(anchor='e')
-        
 
+        ################################################
+        #BACKUPS SECTION
+        ##############################################
+
+        self.backups_section = BCLabelscrolledtw(self, text='Backups', columns=[("ID", 20, "center"), ("Timestamp", 120, "center")])
+        self.backups_section.grid(row=1, column=1, rowspan=4, sticky='e')
+
+            
+        
     def default_remotes(self):
         for element in self.remote_section.tw.get_children():
             self.remote_section.tw.delete(element)
