@@ -1,8 +1,20 @@
 
-#(c) 2022 Cid0rz (cid.kampeador@gmail.com)
+#Copyright  (c) 2022 Cid0rz (cid.kampeador@gmail.com)
+
+#Permission is hereby granted, free of charge, to any person obtaining a copy
+#of this software and associated documentation files (the "Software"), to deal
+#in the Software without restriction, including without limitation the rights
+#to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+#copies of the Software, and to permit persons to whom the Software is
+#furnished to do so, subject to the following conditions:
+
+#The above copyright notice and this permission notice shall be included in
+#all copies or substantial portions of the Software.
 
 import tkinter as tk
 from tkinter import ttk
+from tkinter import messagebox
+from tkinter import simpledialog
 import begoneads.begoneads as bg
 from pathlib import Path
 from begoneads.helpers import is_admin
@@ -60,25 +72,46 @@ class BCLabelscrolledtw(Labelscrolledtw):
         self.delete_backups_btn = tk.Button(self, text="delete marked", width=12, command=self.delete_marked)
         self.delete_backups_btn.pack()
 
+        if sys.platform.startswith('win'):
+            self.source_path = r'c:\windows\system32\drivers\etc\hosts'
+            self.backups_dir = r'c:\windows\system32\drivers\etc\hostsbackup'
+        else:
+           self.source_path = '/etc/hosts'
+           self.backups_dir = "/etc/hostsbackup"
+        self.check_backups_dir()
+        self.config(text=f"Backups at\n[{self.backups_dir}]")
+
+    def check_backups_dir(self):
+        if not os.path.exists(self.backups_dir):
+            result = messagebox.askyesno("Directory Not Found", f"The backups directory doesn't exist. Do you want to create it in {self.backups_dir}?")
+        else:
+            result=False
+        print("result", result)
+        if result:
+            os.makedirs(self.backups_dir)
+
     def on_click(self, event):
         item = self.tw.identify('item', event.x, event.y)
         if not self.tw.tag_has('todelete', item):
             self.tw.selection_remove()
             self.tw.selection_toggle(item)
-            
+
+    def populate_backups(self):
+        self.check_backups_dir()
+        
+        for filename in os.listdir(self.backups_dir):
+            timestamp = filename.split(".")[0]
+            alias = filename.split(".")[1]
+            self.backups_section.tw.insert("", index=filename, iid=str(filename) , values=(timestamp,alias ))
+        
+
+
+        
     def make_backup(self):
-
-        if sys.platform.startswith('win'):
-            source_path = r'c:\windows\system32\drivers\etc\hosts'
-            backup_dir = r'c:\windows\system32\drivers\etc\hostsbackup'
-        else:
-           source_path = '/etc/hosts'
-           backup_dir = "/etc/hostsbackup"
-
         filename = time.time()
-        os.makedirs(backup_dir)
-        #shutil.copy(source_path, f"{backup_dir}/{filename}")
-        self.tw.insert()
+        alias = simpledialog.askstring(title="Define alias", prompt="Please enter the alias for your backup: ")
+        shutil.copy(self.source_path, f"{self.backups_dir}/{filename}.{alias}.bck")
+        self.tw.insert("", index=filename, iid=str(filename), )
 
         
     
@@ -164,20 +197,11 @@ class App (tk.Tk):
         #BACKUPS SECTION
         ##############################################
 
-        self.backups_section = BCLabelscrolledtw(self, text='Backups', columns=[("ID", 20, "center"), ("Timestamp", 120, "center"), ("Alias", 120, 'e')])
+        self.backups_section = BCLabelscrolledtw(self, text='Backups', columns=[("Timestamp", 120, "center"), ("Alias", 120, 'e')])
         self.backups_section.grid(row=1, column=1, rowspan=4, sticky='e')
-
-        if sys.platform.startswith('win'):
-            backup_dir = r'c:\windows\system32\drivers\etc\hostsbackup'
-        else:
-           backup_dir = "/etc/hostsbackup"
-
-        if not os.path.isdir(backup_dir):
-            os.makedirs(backup_dir)
-
-        for filename in os.listdir(backup_dir):
-            self.backups_section.tw.insert("",filename, filename,  )
+        self.backups_section.populate_backups()
         
+
         
     def default_remotes(self):
         for element in self.remote_section.tw.get_children():
