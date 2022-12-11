@@ -58,7 +58,6 @@ class Labelscrolledtw(ttk.LabelFrame):
 
     def delete_marked(self):
         marked = self.tw.tag_has('todelete')
-        print('deleting...', marked)
         for item in marked:
             self.tw.delete(item)
 
@@ -78,17 +77,30 @@ class BCLabelscrolledtw(Labelscrolledtw):
         else:
            self.source_path = '/etc/hosts'
            self.backups_dir = "/etc/hostsbackup"
-        self.check_backups_dir()
-        self.config(text=f"Backups at\n[{self.backups_dir}]")
+        self.populate_backups()
+        
 
     def check_backups_dir(self):
         if not os.path.exists(self.backups_dir):
             result = messagebox.askyesno("Directory Not Found", f"The backups directory doesn't exist. Do you want to create it in {self.backups_dir}?")
         else:
-            result=False
-        print("result", result)
+            self.config(text=f"Backups at\n[{self.backups_dir}]")
+            return True
+
         if result:
             os.makedirs(self.backups_dir)
+            self.make_backup_btn.config(state='normal')
+            self.restore_backup_btn.config(state='normal')
+            self.delete_backups_btn.config(state='normal')
+            self.config(text=f"Backups at\n[{self.backups_dir}]")
+            return True
+        else:
+            messagebox.showwarning(title="Missing backups directory", message="No backups directory")
+            self.config(text=f"Backups\n NOT AVAILABLE")
+            self.make_backup_btn.config(state='disabled')
+            self.restore_backup_btn.config(state='disabled')
+            self.delete_backups_btn.config(state='disabled')
+            return False
 
     def on_click(self, event):
         item = self.tw.identify('item', event.x, event.y)
@@ -97,21 +109,23 @@ class BCLabelscrolledtw(Labelscrolledtw):
             self.tw.selection_toggle(item)
 
     def populate_backups(self):
-        self.check_backups_dir()
+        if not self.check_backups_dir():
+            return
         
-        for filename in os.listdir(self.backups_dir):
+        for nr, filename in enumerate(os.listdir(self.backups_dir)):
             timestamp = filename.split(".")[0]
             alias = filename.split(".")[1]
-            self.backups_section.tw.insert("", index=filename, iid=str(filename) , values=(timestamp,alias ))
+            self.tw.insert("", index=nr, iid=str(nr) , values=(timestamp,alias))
         
 
 
         
     def make_backup(self):
-        filename = time.time()
+        filename = int(time.time())
         alias = simpledialog.askstring(title="Define alias", prompt="Please enter the alias for your backup: ")
         shutil.copy(self.source_path, f"{self.backups_dir}/{filename}.{alias}.bck")
-        self.tw.insert("", index=filename, iid=str(filename), )
+        pos = len(self.tw.get_children())
+        self.tw.insert("", index=pos, iid=pos, values=(filename, alias) )
 
         
     
@@ -199,7 +213,6 @@ class App (tk.Tk):
 
         self.backups_section = BCLabelscrolledtw(self, text='Backups', columns=[("Timestamp", 120, "center"), ("Alias", 120, 'e')])
         self.backups_section.grid(row=1, column=1, rowspan=4, sticky='e')
-        self.backups_section.populate_backups()
         
 
         
