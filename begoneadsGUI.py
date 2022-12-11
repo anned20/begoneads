@@ -131,7 +131,18 @@ class BCLabelscrolledtw(Labelscrolledtw):
     
     def restore_backup(self):
         pass
-    
+
+    def delete_marked(self):
+        marked = self.tw.tag_has('todelete')
+        for item in marked:
+            print(item)
+            print(self.tw.item(item)['values'])
+            filename = self.tw.item(item)['values'][0]
+            alias = self.tw.item(item)['values'][1]
+            item_path = Path(self.backups_dir)
+            os.remove(item_path / Path(f"{filename}.{alias}.bck") )
+            self.tw.delete(item)
+            
             
 
 class App (tk.Tk):
