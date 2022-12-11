@@ -4,6 +4,10 @@
 import tkinter as tk
 from tkinter import ttk
 import begoneads.begoneads as bg
+from pathlib import Path
+from begoneads.helpers import is_admin
+from begoneads.exceptions import NotElevatedException
+import shutil, os, time, sys
 
 
 class Labelscrolledtw(ttk.LabelFrame):
@@ -49,17 +53,47 @@ class Labelscrolledtw(ttk.LabelFrame):
 class BCLabelscrolledtw(Labelscrolledtw):
     def __init__(self, parent, text='BCLabelscrolledtw', borderwidth=4, width=300, height=200, columns = [("ID", 20, 'center')], selectmode='none'):
         super().__init__(parent , text=text, borderwidth=borderwidth, width=width, height=height, columns = columns, selectmode=selectmode)
+        self.make_backup_btn = tk.Button(self, text="make backup", width=12, command=self.make_backup)
+        self.make_backup_btn.pack()
+        self.restore_backup_btn = tk.Button(self, text="restore selected", width=12, command=self.restore_backup)
+        self.restore_backup_btn.pack()
+        self.delete_backups_btn = tk.Button(self, text="delete marked", width=12, command=self.delete_marked)
+        self.delete_backups_btn.pack()
 
     def on_click(self, event):
         item = self.tw.identify('item', event.x, event.y)
         if not self.tw.tag_has('todelete', item):
-            self.tw.selection_remove(self.tw.selection_get())
+            self.tw.selection_remove()
             self.tw.selection_toggle(item)
+            
+    def make_backup(self):
+
+        if sys.platform.startswith('win'):
+            source_path = r'c:\windows\system32\drivers\etc\hosts'
+            backup_dir = r'c:\windows\system32\drivers\etc\hostsbackup'
+        else:
+           source_path = '/etc/hosts'
+           backup_dir = "/etc/hostsbackup"
+
+        filename = time.time()
+        os.makedirs(backup_dir)
+        #shutil.copy(source_path, f"{backup_dir}/{filename}")
+        self.tw.insert()
+
+        
+    
+    def restore_backup(self):
+        pass
+    
+            
 
 class App (tk.Tk):
     """Begoneads GUI in tkinter, some widgets tied together that invoke the begoneads functions. and extend its functionality"""
     
     def __init__(self):
+        #if not is_admin(sys.platform.startswith('win')):
+        #    raise NotElevatedException(
+        #    'This program needs to be run as root to work properly')
         super().__init__()
         self.title("Begoneads GUI")
         self.geometry("650x750")
@@ -130,16 +164,20 @@ class App (tk.Tk):
         #BACKUPS SECTION
         ##############################################
 
-        self.backups_section = BCLabelscrolledtw(self, text='Backups', columns=[("ID", 20, "center"), ("Timestamp", 120, "center")])
+        self.backups_section = BCLabelscrolledtw(self, text='Backups', columns=[("ID", 20, "center"), ("Timestamp", 120, "center"), ("Alias", 120, 'e')])
         self.backups_section.grid(row=1, column=1, rowspan=4, sticky='e')
 
-        self.make_backup_btn = tk.Button(self.backups_section, text="make backup", width=12)
-        self.make_backup_btn.pack()
-        self.restore_backup_btn = tk.Button(self.backups_section, text="restore selected", width=12)
-        self.restore_backup_btn.pack()
-        self.delete_backups_btn = tk.Button(self.backups_section, text="delete marked", width=12)
-        self.delete_backups_btn.pack()
-            
+        if sys.platform.startswith('win'):
+            backup_dir = r'c:\windows\system32\drivers\etc\hostsbackup'
+        else:
+           backup_dir = "/etc/hostsbackup"
+
+        if not os.path.isdir(backup_dir):
+            os.makedirs(backup_dir)
+
+        for filename in os.listdir(backup_dir):
+            self.backups_section.tw.insert("",filename, filename,  )
+        
         
     def default_remotes(self):
         for element in self.remote_section.tw.get_children():
@@ -185,7 +223,7 @@ class App (tk.Tk):
     def stop(self):
         bg.uninstall.callback()
 
-    def make_backup(self):
+
         
 
 
