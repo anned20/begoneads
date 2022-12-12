@@ -62,7 +62,7 @@ class Labelscrolledtw(ttk.LabelFrame):
             self.tw.delete(item)
 
 class BCLabelscrolledtw(Labelscrolledtw):
-    def __init__(self, parent, text='BCLabelscrolledtw', borderwidth=4, width=300, height=200, columns = [("ID", 20, 'center')], selectmode='none'):
+    def __init__(self, parent, text='BCLabelscrolledtw', borderwidth=4, width=300, height=200,  columns=[("Timestamp", 120, "center"), ("Alias", 120, 'e')], selectmode='none'):
         super().__init__(parent , text=text, borderwidth=borderwidth, width=width, height=height, columns = columns, selectmode=selectmode)
         self.make_backup_btn = tk.Button(self, text="make backup", width=12, command=self.make_backup)
         self.make_backup_btn.pack()
@@ -111,7 +111,7 @@ class BCLabelscrolledtw(Labelscrolledtw):
     def populate_backups(self):
         if not self.check_backups_dir():
             return
-        
+        self.tw.delete(*self.tw.get_children())
         for nr, filename in enumerate(os.listdir(self.backups_dir)):
             timestamp = int(filename.split(".")[0])
             dt = datetime.datetime.fromtimestamp(timestamp)
@@ -146,6 +146,7 @@ class BCLabelscrolledtw(Labelscrolledtw):
             item_path = Path(self.backups_dir)
             os.remove(item_path / Path(f"{filename}.{alias}.bck") )
             self.tw.delete(item)
+        self.populate_backups()
             
             
 
@@ -226,7 +227,7 @@ class App (tk.Tk):
         #BACKUPS SECTION
         ##############################################
 
-        self.backups_section = BCLabelscrolledtw(self, text='Backups', columns=[("Timestamp", 120, "center"), ("Alias", 120, 'e')])
+        self.backups_section = BCLabelscrolledtw(self, text='Backups')
         self.backups_section.grid(row=1, column=1, rowspan=4, sticky='e')
         
 
