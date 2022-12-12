@@ -140,9 +140,8 @@ class BCLabelscrolledtw(Labelscrolledtw):
     def delete_marked(self):
         marked = self.tw.tag_has('todelete')
         for item in marked:
-            print(item)
-            print(self.tw.item(item)['values'])
-            filename = self.tw.item(item)['values'][0]
+            dt = datetime.datetime.strptime(self.tw.item(item)['values'][0], '%d/%m/%y-%H:%M:%S')
+            filename = int(datetime.datetime.timestamp(dt))
             alias = self.tw.item(item)['values'][1]
             item_path = Path(self.backups_dir)
             os.remove(item_path / Path(f"{filename}.{alias}.bck") )
