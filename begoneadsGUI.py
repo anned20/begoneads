@@ -19,7 +19,7 @@ import begoneads.begoneads as bg
 from pathlib import Path
 from begoneads.helpers import is_admin
 from begoneads.exceptions import NotElevatedException
-import shutil, os, time, sys
+import shutil, os, time, sys, datetime
 
 
 class Labelscrolledtw(ttk.LabelFrame):
@@ -105,7 +105,7 @@ class BCLabelscrolledtw(Labelscrolledtw):
     def on_click(self, event):
         item = self.tw.identify('item', event.x, event.y)
         if not self.tw.tag_has('todelete', item):
-            self.tw.selection_remove()
+            self.tw.selection_remove(self.tw.selection())
             self.tw.selection_toggle(item)
 
     def populate_backups(self):
@@ -113,24 +113,29 @@ class BCLabelscrolledtw(Labelscrolledtw):
             return
         
         for nr, filename in enumerate(os.listdir(self.backups_dir)):
-            timestamp = filename.split(".")[0]
+            timestamp = int(filename.split(".")[0])
+            dt = datetime.datetime.fromtimestamp(timestamp)
+            timestr = dt.strftime('%d/%m/%y-%H:%M:%S')
             alias = filename.split(".")[1]
-            self.tw.insert("", index=nr, iid=str(nr) , values=(timestamp,alias))
+            self.tw.insert("", index=nr, iid=str(nr) , values=(timestr,alias))
         
 
 
         
     def make_backup(self):
-        filename = int(time.time())
+        timestamp = int(time.time())
+        dt = datetime.datetime.fromtimestamp(timestamp)
+        timestr = dt.strftime('%d/%m/%y-%H:%M:%S')
+        filename = int(timestamp)
         alias = simpledialog.askstring(title="Define alias", prompt="Please enter the alias for your backup: ")
         shutil.copy(self.source_path, f"{self.backups_dir}/{filename}.{alias}.bck")
         pos = len(self.tw.get_children())
-        self.tw.insert("", index=pos, iid=pos, values=(filename, alias) )
+        self.tw.insert("", index=pos, iid=pos, values=(timestr, alias) )
 
         
     
     def restore_backup(self):
-        pass
+        print(self.tw.selection())
 
     def delete_marked(self):
         marked = self.tw.tag_has('todelete')
