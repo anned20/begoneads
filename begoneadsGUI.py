@@ -46,6 +46,7 @@ class Labelscrolledtw(ttk.LabelFrame):
         item = self.tw.identify('item', event.x, event.y)
         if not self.tw.tag_has('todelete', item):
             self.tw.selection_toggle(item)
+            
     def on_right_click(self, event):
         item = self.tw.identify('item', event.x, event.y)
         #print(item)
@@ -119,9 +120,6 @@ class BCLabelscrolledtw(Labelscrolledtw):
             alias = filename.split(".")[1]
             self.tw.insert("", index=nr, iid=str(nr) , values=(timestr,alias))
         
-
-
-        
     def make_backup(self):
         timestamp = int(time.time())
         dt = datetime.datetime.fromtimestamp(timestamp)
@@ -135,8 +133,15 @@ class BCLabelscrolledtw(Labelscrolledtw):
         
     
     def restore_backup(self):
-        print(self.tw.selection())
-
+        item = self.tw.item(self.tw.selection())
+        dt = datetime.datetime.strptime(item['values'][0], '%d/%m/%y-%H:%M:%S')
+        filename = int(datetime.datetime.timestamp(dt))
+        alias = item['values'][1]
+        item_path = Path(self.backups_dir)
+        print(f"{self.backups_dir}/{filename}.{alias}.bck", self.source_path)
+        shutil.copy(f"{self.backups_dir}/{filename}.{alias}.bck", self.source_path)
+        
+        
     def delete_marked(self):
         marked = self.tw.tag_has('todelete')
         for item in marked:
