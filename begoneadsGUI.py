@@ -120,12 +120,13 @@ class BCLabelscrolledtw(Labelscrolledtw):
             alias = filename.split(".")[1]
             self.tw.insert("", index=nr, iid=str(nr) , values=(timestr,alias))
         
-    def make_backup(self):
+    def make_backup(self, alias=None):
         timestamp = int(time.time())
         dt = datetime.datetime.fromtimestamp(timestamp)
         timestr = dt.strftime('%d/%m/%y-%H:%M:%S')
         filename = int(timestamp)
-        alias = simpledialog.askstring(title="Define alias", prompt="Please enter the alias for your backup: ")
+        if not alias:
+            alias = simpledialog.askstring(title="Define alias", prompt="Please enter the alias for your backup: ")
         shutil.copy(self.source_path, f"{self.backups_dir}/{filename}.{alias}.bck")
         pos = len(self.tw.get_children())
         self.tw.insert("", index=pos, iid=pos, values=(timestr, alias) )
@@ -138,7 +139,7 @@ class BCLabelscrolledtw(Labelscrolledtw):
         filename = int(datetime.datetime.timestamp(dt))
         alias = item['values'][1]
         item_path = Path(self.backups_dir)
-        print(f"{self.backups_dir}/{filename}.{alias}.bck", self.source_path)
+        #print(f"{self.backups_dir}/{filename}.{alias}.bck", self.source_path)
         shutil.copy(f"{self.backups_dir}/{filename}.{alias}.bck", self.source_path)
         
         
@@ -272,12 +273,14 @@ class App (tk.Tk):
         sel2=self.local_section.tw.selection()
         remotes = ",".join([self.remote_section.tw.item(i)['values'][1] for i in sel])
         paths = ",".join([self.local_section.tw.item(i)['values'][1] for i in sel2])
-        print (remotes)
-        print(paths)
-        print([i.strip() for i in remotes.split(',')])
+        #print (remotes)
+        #print(paths)
+        #print([i.strip() for i in remotes.split(',')])
         bg.install.callback(remotes, paths)
     def pause(self):
-        pass
+        self.backups_section.make_backup(alias="Backup")
+        print("Backup created, when you want to resume, restore it.")
+        self.stop()
     def stop(self):
         bg.uninstall.callback()
 
