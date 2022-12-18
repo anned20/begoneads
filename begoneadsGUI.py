@@ -215,14 +215,15 @@ class App (tk.Tk):
         #ACTIONS SECTION
         ##############################################
         self.actions_section = ttk.Labelframe(self, text='Actions', borderwidth=4, width=200, height=200)
-        self.actions_section.pack_propagate(False)
         self.actions_section.grid(row=0, column=1)
         self.play_bttn = tk.Button(self.actions_section, text='Play', command=self.install, width=8)
-        self.play_bttn.pack(anchor='w', padx=5, pady=2)
+        self.play_bttn.pack(padx=5, pady=2)
         self.pause_bttn = tk.Button(self.actions_section, text='Pause', command=self.pause, width=8)
-        self.pause_bttn.pack(anchor='w', padx=5, pady=2)
+        self.pause_bttn.pack( padx=5, pady=2)
         self.stop_bttn = tk.Button(self.actions_section, text='Stop', command=self.stop, width=8)
-        self.stop_bttn.pack(anchor='w', padx=5, pady=2)
+        self.stop_bttn.pack( padx=5, pady=2)
+        self.check_button = tk.Button(self.actions_section, text='Check', command=self.check, width=8)
+        self.check_button.pack(padx=5, pady=2)
 
         self.default_remotes_btn = tk.Button(self.actions_section, text="Default remotes", width=12, command=self.default_remotes)
         self.default_remotes_btn.pack(anchor='e')
@@ -283,6 +284,12 @@ class App (tk.Tk):
         self.stop()
     def stop(self):
         bg.uninstall.callback()
+    def check(self):
+        chk = bg.check.callback()
+        if chk:
+            messagebox.showinfo(title='Check', message="Begoneads IS installed")
+        else:
+            messagebox.showinfo(title='Check', message="Begoneads NOT installed")
 
 
         

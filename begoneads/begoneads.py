@@ -135,9 +135,32 @@ def uninstall():
 
     print('BeGoneAds uninstalled')
 
-@cli.command('pause', short_help='Pause BeGoneAds')
-def gui():
-    print("Begoneads paused")
+@cli.command('check', short_help='Check if BeGoneAds is currently installed in the hosts file')
+def check():
+     # Check if we have sufficient permissions
+    if not is_admin(sys.platform.startswith('win')):
+        raise NotElevatedException(
+            'This program needs to be run as root to work properly')
+
+    if sys.platform.startswith('win'):
+        path = r'c:\windows\system32\drivers\etc\hosts'
+    else:
+        path = '/etc/hosts'
+        print("\nhost Linux")
+
+    hosts_manager = HostsManager(path)
+    chk= hosts_manager.has_begoneads()
+    if not chk:
+        print(f"Begoneads NOT installed\n")
+        return False
+    else:
+        print("Begonads IS installed\n")
+        return True
+    
+    
+
+
+    
 
 if __name__ == '__main__':
     cli()
