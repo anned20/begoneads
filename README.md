@@ -1,4 +1,4 @@
-# BeGoneAds
+# BeGoneAds (fork with GUI)
 
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/anned20/begoneads.svg)
 ![GitHub issues](https://img.shields.io/github/issues/anned20/begoneads.svg)
@@ -6,6 +6,10 @@
 ![GitHub](https://img.shields.io/github/license/anned20/begoneads.svg)
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
 ![Awesome Badges](https://img.shields.io/badge/badges-awesome-green.svg)
+
+This is a fork of Begoneads where I have added a GUI to manage the hosts file. The intereface allows for installing Begoneads (play), uninstalling Begoneads (stop) and pausing begoneads, that creates a backup of the hosts file and uninstalls it. With the GUI you can easily select the sources you are going to install in your hosts file and you can also make and restore backups which allows for quick hosts file switching.
+
+![GUI](https://imgur.com/a/xKPl9o5)
 
 BeGoneAds is a script that puts some popular hosts file lists into the systems hosts file as a adblocker measure.
 
