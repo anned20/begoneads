@@ -58,18 +58,20 @@ class Labelscrolledtw(ttk.LabelFrame):
         #print("tag has: ", self.tw.tag_has('todelete'))
 
     def delete_marked(self):
+        """Delete records previously marked for deletion"""
         marked = self.tw.tag_has('todelete')
         for item in marked:
             self.tw.delete(item)
 
 class BCLabelscrolledtw(Labelscrolledtw):
+    """A subclass of the scrolled treeview to manage the backups."""
     def __init__(self, parent, text='BCLabelscrolledtw', borderwidth=4, width=300, height=200,  columns=[("Timestamp", 120, "center"), ("Alias", 120, 'e')], selectmode='none'):
         super().__init__(parent , text=text, borderwidth=borderwidth, width=width, height=height, columns = columns, selectmode=selectmode)
-        self.make_backup_btn = tk.Button(self, text="make backup", width=12, command=self.make_backup)
+        self.make_backup_btn = tk.Button(self, text="make new backup", width=32, command=self.make_backup)
         self.make_backup_btn.pack()
-        self.restore_backup_btn = tk.Button(self, text="restore selected", width=12, command=self.restore_backup)
+        self.restore_backup_btn = tk.Button(self, text="restore selected (in green)", width=32, command=self.restore_backup)
         self.restore_backup_btn.pack()
-        self.delete_backups_btn = tk.Button(self, text="delete marked", width=12, command=self.delete_marked)
+        self.delete_backups_btn = tk.Button(self, text="delete marked (in red)", width=32, command=self.delete_marked)
         self.delete_backups_btn.pack()
 
         if sys.platform.startswith('win'):
@@ -82,6 +84,8 @@ class BCLabelscrolledtw(Labelscrolledtw):
         
 
     def check_backups_dir(self):
+        """Check for the existence of a backups directory. If it doesnt exist, offer to create it.
+        If the folder does not exist and is not created, disable the widget."""
         if not os.path.exists(self.backups_dir):
             result = messagebox.askyesno("Directory Not Found", f"The backups directory doesn't exist. Do you want to create it in {self.backups_dir}?")
         else:
@@ -110,6 +114,7 @@ class BCLabelscrolledtw(Labelscrolledtw):
             self.tw.selection_toggle(item)
 
     def populate_backups(self):
+        """Display the information about the backups dir"""
         if not self.check_backups_dir():
             return
         self.tw.delete(*self.tw.get_children())
@@ -135,15 +140,21 @@ class BCLabelscrolledtw(Labelscrolledtw):
     
     def restore_backup(self):
         item = self.tw.item(self.tw.selection())
+        if item['values'] == '':
+            messagebox.showinfo(title='Error', message="Please select a backup to restore")
+            return
         dt = datetime.datetime.strptime(item['values'][0], '%d/%m/%y-%H:%M:%S')
         filename = int(datetime.datetime.timestamp(dt))
         alias = item['values'][1]
         item_path = Path(self.backups_dir)
-        #print(f"{self.backups_dir}/{filename}.{alias}.bck", self.source_path)
         shutil.copy(f"{self.backups_dir}/{filename}.{alias}.bck", self.source_path)
+        print(f"{self.backups_dir}/{filename}.{alias}.bck has been restored in hosts")
         
         
     def delete_marked(self):
+        """Remove previously selected backups from the view and delete the
+        corresponding  backup files."""
+
         marked = self.tw.tag_has('todelete')
         for item in marked:
             dt = datetime.datetime.strptime(self.tw.item(item)['values'][0], '%d/%m/%y-%H:%M:%S')
@@ -157,15 +168,16 @@ class BCLabelscrolledtw(Labelscrolledtw):
             
 
 class App (tk.Tk):
-    """Begoneads GUI in tkinter, some widgets tied together that invoke the begoneads functions. and extend its functionality"""
+    """Begoneads GUI in tkinter, some widgets tied together that invoke the
+    begoneads functions. and extend its functionality"""
     
     def __init__(self):
-        #if not is_admin(sys.platform.startswith('win')):
-        #    raise NotElevatedException(
-        #    'This program needs to be run as root to work properly')
         super().__init__()
         self.title("Begoneads GUI")
         self.geometry("650x750")
+        if not is_admin(sys.platform.startswith('win')):
+            messagebox.showinfo(title="Needs to run as admin", message='This program needs to be run as root to work properly')
+            raise NotElevatedException('This program needs to be run as root to work properly')
         self.resizable(False, False)
         self.style=ttk.Style()
         self.style.map('Treeview', background=[('selected', 'green')])
@@ -240,6 +252,7 @@ class App (tk.Tk):
 
         
     def default_remotes(self):
+        """Get the default remotes from begoneads configuration."""
         for element in self.remote_section.tw.get_children():
             self.remote_section.tw.delete(element)
         self.sources = list(enumerate(bg.sources))
@@ -248,10 +261,12 @@ class App (tk.Tk):
         self.remote_section.tw.selection_add([str(i) for i in range(len(self.sources))])
             
     def clear_paths(self):
+        """Remove all the paths from the local section"""
         for element in self.local_section.tw.get_children():
             self.local_section.tw.delete(element)
 
     def add_domain(self):
+        """Add an url to retrieve a hosts file from, it has to be a properly formated file."""
         domain = self.add_remote_entry.get()
         if domain == '':
             return
@@ -261,6 +276,7 @@ class App (tk.Tk):
         self.remote_section.tw.selection_toggle(str(source[0]))
    
     def add_path(self):
+        """Add a path as a local hosts file source."""
         path = self.add_local_entry.get()
         if path == '':
             return
@@ -270,6 +286,7 @@ class App (tk.Tk):
         self.local_section.tw.selection_toggle(str(source[0]))
 
     def install(self):
+        """Call beagoneads install with the currrently selected local and remote sources."""
         sel=self.remote_section.tw.selection()
         sel2=self.local_section.tw.selection()
         remotes = ",".join([self.remote_section.tw.item(i)['values'][1] for i in sel])
@@ -279,12 +296,16 @@ class App (tk.Tk):
         #print([i.strip() for i in remotes.split(',')])
         bg.install.callback(remotes, paths)
     def pause(self):
+        """Create a backup and uninstall begoneads from the hosts file."""
         self.backups_section.make_backup(alias="Backup")
+        messagebox.showinfo(title="Info", message="Backup created, when you want to resume, restore it.")
         print("Backup created, when you want to resume, restore it.")
         self.stop()
     def stop(self):
+        """Call Uninstall begoneads."""
         bg.uninstall.callback()
     def check(self):
+        """Check if begoneads is installed in the system."""
         chk = bg.check.callback()
         if chk:
             messagebox.showinfo(title='Check', message="Begoneads IS installed")
