@@ -1,0 +1,5 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Type=Application
+Name=Begoneads
+Exec=konsole --nofork -e sudo python /home/cid0rz/programs/begoneads/begoneadsGUI.py
