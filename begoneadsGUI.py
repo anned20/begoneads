@@ -231,9 +231,9 @@ class App (tk.Tk):
         self.play_bttn = tk.Button(self.actions_section, text='Play', command=self.install, width=8)
         self.play_bttn.pack(padx=5, pady=2)
         self.pause_bttn = tk.Button(self.actions_section, text='Pause', command=self.pause, width=8)
-        self.pause_bttn.pack( padx=5, pady=2)
+        self.pause_bttn.pack(padx=5,pady=2)
         self.stop_bttn = tk.Button(self.actions_section, text='Stop', command=self.stop, width=8)
-        self.stop_bttn.pack( padx=5, pady=2)
+        self.stop_bttn.pack(padx=5,pady=2)
         self.check_button = tk.Button(self.actions_section, text='Check', command=self.check, width=8)
         self.check_button.pack(padx=5, pady=2)
 
