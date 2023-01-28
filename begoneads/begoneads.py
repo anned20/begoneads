@@ -149,8 +149,8 @@ def check():
         print("\nhost Linux")
 
     hosts_manager = HostsManager(path)
-    chk= hosts_manager.has_begoneads()
-    if not chk:
+    has_begoneads = hosts_manager.has_begoneads()
+    if not has_begoneads:
         print(f"Begoneads NOT installed\n")
         return False
     else:
