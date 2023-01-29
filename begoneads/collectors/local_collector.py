@@ -1,5 +1,5 @@
 from tqdm import tqdm
-from begoneads.collectors.base_collector import BaseCollector
+from .base_collector import BaseCollector
 
 
 class LocalCollector(BaseCollector):
