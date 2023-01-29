@@ -15,10 +15,10 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
 from tkinter import simpledialog
-import begoneads.begoneads as bg
+import begoneads
 from pathlib import Path
-from begoneads.helpers import is_admin
-from begoneads.exceptions import NotElevatedException
+from helpers import is_admin
+from exceptions import NotElevatedException
 import shutil, os, time, sys, datetime
 
 
@@ -49,13 +49,11 @@ class Labelscrolledtw(ttk.LabelFrame):
             
     def on_right_click(self, event):
         item = self.tw.identify('item', event.x, event.y)
-        #print(item)
         self.tw.selection_remove(item)
         if self.tw.tag_has('todelete', item):
             self.tw.item(str(item), tags=())
         else:
             self.tw.item(str(item), tags='todelete')
-        #print("tag has: ", self.tw.tag_has('todelete'))
 
     def delete_marked(self):
         """Delete records previously marked for deletion"""
@@ -188,11 +186,8 @@ class App (tk.Tk):
         ##############################################
         self.remote_section = Labelscrolledtw(self, text='Remote Sources', borderwidth=4, width=300, height=200, columns=[("ID", 20, 'center'), ("Address", 300, 'w')])
         self.remote_section.grid(padx=10, pady=20, row=0, column=0)
-        self.sources = list(enumerate(bg.sources))
+        self.sources = list(enumerate(begoneads.sources))
         self.local_sources = []
-        #for i in self.sources:
-            #print(i)
-
         for source in self.sources:
             self.remote_section.tw.insert(parent='', index=source[0], iid=str(source[0]), values=source )
         self.remote_section.tw.selection_add([str(i) for i in range(len(self.sources))])
@@ -255,7 +250,7 @@ class App (tk.Tk):
         """Get the default remotes from begoneads configuration."""
         for element in self.remote_section.tw.get_children():
             self.remote_section.tw.delete(element)
-        self.sources = list(enumerate(bg.sources))
+        self.sources = list(enumerate(begoneads.sources))
         for source in self.sources:
             self.remote_section.tw.insert(parent='', index=source[0], iid=str(source[0]), values=source )
         self.remote_section.tw.selection_add([str(i) for i in range(len(self.sources))])
@@ -291,10 +286,7 @@ class App (tk.Tk):
         sel2=self.local_section.tw.selection()
         remotes = ",".join([self.remote_section.tw.item(i)['values'][1] for i in sel])
         paths = ",".join([self.local_section.tw.item(i)['values'][1] for i in sel2])
-        #print (remotes)
-        #print(paths)
-        #print([i.strip() for i in remotes.split(',')])
-        bg.install.callback(remotes, paths)
+        begoneads.install.callback(remotes, paths)
     def pause(self):
         """Create a backup and uninstall begoneads from the hosts file."""
         self.backups_section.make_backup(alias="Backup")
@@ -303,19 +295,18 @@ class App (tk.Tk):
         self.stop()
     def stop(self):
         """Call Uninstall begoneads."""
-        bg.uninstall.callback()
+        begoneads.uninstall.callback()
     def check(self):
         """Check if begoneads is installed in the system."""
-        chk = bg.check.callback()
+        chk = begoneads.check.callback()
         if chk:
             messagebox.showinfo(title='Check', message="Begoneads IS installed")
         else:
             messagebox.showinfo(title='Check', message="Begoneads NOT installed")
 
 
-        
 
 
-#if __name__ == __main__:        
-app = App()
-app.mainloop()
+if __name__ == "__main__":
+    app = App()
+    app.mainloop()

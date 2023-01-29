@@ -1,4 +1,4 @@
-# BeGoneAds (fork with GUI)
+# BeGoneAds
 
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/anned20/begoneads.svg)
 ![GitHub issues](https://img.shields.io/github/issues/anned20/begoneads.svg)

@@ -146,7 +146,6 @@ def check():
         path = r'c:\windows\system32\drivers\etc\hosts'
     else:
         path = '/etc/hosts'
-        print("\nhost Linux")
 
     hosts_manager = HostsManager(path)
     has_begoneads = hosts_manager.has_begoneads()

@@ -1,0 +1,5 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Type=Application
+Name=Begoneads
+Exec=xterm -e sudo python $(find $(pip show begoneads | grep Location | awk '{print $2}') -name "begoneadsGUI.py")
