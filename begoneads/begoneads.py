@@ -135,9 +135,10 @@ def uninstall():
 
     print('BeGoneAds uninstalled')
 
+
 @cli.command('check', short_help='Check if BeGoneAds is currently installed in the hosts file')
 def check():
-     # Check if we have sufficient permissions
+    # Check if we have sufficient permissions
     if not is_admin(sys.platform.startswith('win')):
         raise NotElevatedException(
             'This program needs to be run as root to work properly')
@@ -155,11 +156,7 @@ def check():
     else:
         print("Begonads IS installed\n")
         return True
-    
-    
 
-
-    
 
 if __name__ == '__main__':
     cli()
