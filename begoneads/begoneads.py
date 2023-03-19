@@ -141,7 +141,8 @@ def check():
     # Check if we have sufficient permissions
     if not is_admin(sys.platform.startswith('win')):
         raise NotElevatedException(
-            'This program needs to be run as root to work properly')
+            'This program needs to be run as root to work properly'
+        )
 
     if sys.platform.startswith('win'):
         path = r'c:\windows\system32\drivers\etc\hosts'
